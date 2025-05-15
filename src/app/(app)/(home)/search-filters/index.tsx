@@ -15,9 +15,10 @@ export const SearchFilters = ({
         // py-8: adds vertical padding
         // border-b: adds a bottom border using the default border color
         <div className="px-4 lg:px-12 py-8 border-b flex flex-col gap-4 w-full">
-            <SearchInput></SearchInput>
-            <Categories data = {data}></Categories>
+            <SearchInput data={data}></SearchInput>
+            <div className="hidden lg:block">
+                <Categories data = {data}></Categories>
+            </div>
         </div>
     );
 };
-
