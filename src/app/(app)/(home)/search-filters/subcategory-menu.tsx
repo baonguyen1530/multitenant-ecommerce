@@ -25,7 +25,7 @@ export const SubcategoryMenu = ({
             style={{
                 top: position.top,
                 left: position.left,
-            }}g
+            }}
         >
             {/* Invisible bridge to maintain hover */}
             <div className="h-3 w-60"/>
