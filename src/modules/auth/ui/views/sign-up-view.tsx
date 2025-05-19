@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Poppins } from "next/font/google";
 import{ Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { Mutation, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
     Form,
@@ -13,28 +13,25 @@ import {
     FormField,
     FormItem,
     FormLabel,
+    FormDescription,
     FormMessage,
 } from "@/components/ui/form";
-
+import { registerSchema } from "../../schemas";
 import { z } from "zod";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 
-import { loginSchema } from "../../schemas";
-
 const poppins = Poppins({
     subsets: ["latin"],
     weight: ["700"],
 });
 
-export const SignInView = () => {
+export const SignUpView = () => {
     const router = useRouter();
-
     const trpc = useTRPC();
-
-    const login = useMutation(trpc.auth.login.mutationOptions({
+    const register = useMutation(trpc.auth.register.mutationOptions({
         onError: (error) => {
             toast.error(error.message);
         },
@@ -43,18 +40,24 @@ export const SignInView = () => {
         }
     }));
 
-    const form = useForm<z.infer<typeof loginSchema>>({
+    const form = useForm<z.infer<typeof registerSchema>>({
         mode: "all",
-        resolver: zodResolver(loginSchema),
+        resolver: zodResolver(registerSchema),
         defaultValues: {
             email: "",
             password: "",
+            username: "",
         },
     });
 
-    const onSubmit = (values: z.infer<typeof loginSchema>) => {
-        login.mutate(values);
+    const onSubmit = (values: z.infer<typeof registerSchema>) => {
+        register.mutate(values);
     };
+
+    const username = form.watch("username");
+    const usernameErrors = form.formState.errors.username;
+
+    const showPreview = username && !usernameErrors;
      
     return (
         <div className="grid grid-cols-1 lg:grid-cols-5">
@@ -77,14 +80,32 @@ export const SignInView = () => {
                                 size="sm"
                                 className="border-none text-base underline"
                             >
-                                <Link prefetch href="/sign-up">
-                                    Sign Up
+                                <Link prefetch href="/sign-in">
+                                    Sign In
                                 </Link>
                             </Button>
                         </div>
                         <h1 className="text-4xl font-medium">
-                            Welcome back to 4rchiv3dGarm3nts
+                            Join over 1000 sellers earning money on 4rchiv3dGarm3nts.
                         </h1>
+                        <FormField
+                            name="username"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-base">Username</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Enter username"/>
+                                    </FormControl>
+                                    <FormDescription
+                                        className={cn("hidden", showPreview && "block")}
+                                    >
+                                        Your store will be available at&nbsp;
+                                        <strong>{username}</strong>
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem> 
+                            )}
+                        />
                         <FormField
                             name="email"
                             render={({ field }) => (
@@ -110,13 +131,13 @@ export const SignInView = () => {
                             )}
                         />
                         <Button
-                            disabled={login.isPending}
+                            disabled={register.isPending}
                             type="submit"
                             size="lg"
                             variant="elevated"
                             className="bg-black text-white hover:bg-pink-400 hover:text-primary"
                         >
-                            Log In
+                            Create account
                         </Button>
                     </form>
                 </Form>
