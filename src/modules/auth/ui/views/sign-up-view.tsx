@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Poppins } from "next/font/google";
 import{ Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mutation, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
     Form,
@@ -41,7 +41,8 @@ export const SignUpView = () => {
     }));
 
     const form = useForm<z.infer<typeof registerSchema>>({
-        mode: "all",
+        mode: "onTouched",
+        reValidateMode: "onChange",
         resolver: zodResolver(registerSchema),
         defaultValues: {
             email: "",
@@ -56,8 +57,10 @@ export const SignUpView = () => {
 
     const username = form.watch("username");
     const usernameErrors = form.formState.errors.username;
+    const usernameTouched = form.formState.touchedFields.username;
 
     const showPreview = username && !usernameErrors;
+    const showUsernameError = usernameTouched && usernameErrors;
      
     return (
         <div className="grid grid-cols-1 lg:grid-cols-5">
@@ -102,7 +105,7 @@ export const SignUpView = () => {
                                         Your store will be available at&nbsp;
                                         <strong>{username}</strong>
                                     </FormDescription>
-                                    <FormMessage />
+                                    {showUsernameError && <FormMessage />}
                                 </FormItem> 
                             )}
                         />
@@ -114,7 +117,7 @@ export const SignUpView = () => {
                                     <FormControl>
                                         <Input {...field} placeholder="Enter email"/>
                                     </FormControl>
-                                    <FormMessage />
+                                    {form.formState.touchedFields.email && <FormMessage />}
                                 </FormItem> 
                             )}
                         />
@@ -126,7 +129,7 @@ export const SignUpView = () => {
                                     <FormControl>
                                         <Input {...field} type="password" placeholder="Enter password"/>
                                     </FormControl>
-                                    <FormMessage />
+                                    {form.formState.touchedFields.password && <FormMessage />}
                                 </FormItem>
                             )}
                         />

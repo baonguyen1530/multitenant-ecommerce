@@ -64,14 +64,16 @@ export const authRouter = createTRPCRouter({
                 });
             }
 
+            
+
             const cookies = await getCookies();
             cookies.set({
                 name: AUTH_COOKIE,
                 value: data.token,
                 httpOnly: true,
+                secure: true,
                 path: "/",
-                sameSite: "none",
-                domain: ""
+                sameSite: "lax"
             });
         }),
         
@@ -95,13 +97,12 @@ export const authRouter = createTRPCRouter({
 
             const cookies = await getCookies();
             cookies.set({
-                name: AUTH_COOKIE,
+                name: `${ctx.db.config.cookiePrefix}-token`,
                 value: data.token,
                 httpOnly: true,
+                secure: true,
                 path: "/",
-                sameSite: "none",
-                domain: ""
-                
+                sameSite: "lax"
             });
 
             return data;

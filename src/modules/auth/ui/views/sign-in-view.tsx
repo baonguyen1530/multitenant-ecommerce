@@ -32,19 +32,31 @@ const poppins = Poppins({
 export const SignInView = () => {
     const router = useRouter();
 
-    const trpc = useTRPC();
+    const login = useMutation({
+        mutationFn: async (values: z.infer<typeof loginSchema>) => {
+            const response = await fetch("/api/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(values),
+            });
 
-    const login = useMutation(trpc.auth.login.mutationOptions({
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || "Login failed");
+            }
+        },
         onError: (error) => {
             toast.error(error.message);
         },
         onSuccess: () => {
             router.push("/");
         }
-    }));
+    });
 
     const form = useForm<z.infer<typeof loginSchema>>({
-        mode: "all",
+        mode: "onSubmit",
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
@@ -83,7 +95,7 @@ export const SignInView = () => {
                             </Button>
                         </div>
                         <h1 className="text-4xl font-medium">
-                            Welcome back to 4rchiv3dGarm3nts
+                            Welcome back
                         </h1>
                         <FormField
                             name="email"
