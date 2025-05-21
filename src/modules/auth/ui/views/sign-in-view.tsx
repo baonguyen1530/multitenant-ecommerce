@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Poppins } from "next/font/google";
 import{ Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
     Form,
@@ -31,29 +31,18 @@ const poppins = Poppins({
 
 export const SignInView = () => {
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const trpc = useTRPC();
 
-    const login = useMutation({
-        mutationFn: async (values: z.infer<typeof loginSchema>) => {
-            const response = await fetch("/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(values),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || "Login failed");
-            }
-        },
+    const login = useMutation(trpc.auth.login.mutationOptions({
         onError: (error) => {
             toast.error(error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => { 
+            await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
             router.push("/");
         }
-    });
+    }));
 
     const form = useForm<z.infer<typeof loginSchema>>({
         mode: "onSubmit",
