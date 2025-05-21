@@ -6,6 +6,7 @@ import { SearchInput } from "./search-input"
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
+import { BreadcrumbNavigation } from "@/modules/home/ui/components/search-filters/breadcrumbs-navigation"
 
 export const SearchFilters = () => {
     const trpc = useTRPC();
@@ -41,7 +42,7 @@ export const SearchFilters = () => {
             <BreadcrumbNavigation 
                 activeCategory={activeCategory}
                 activeCategoryName={activeCategoryName}
-                activeSubcategoryName={activeSubcategory}
+                activeSubcategoryName={activeSubcategoryName}
             />
         </div>
     );
