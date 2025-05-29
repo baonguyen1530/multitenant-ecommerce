@@ -41,12 +41,13 @@ export const productsRouter = createTRPCRouter({
                     subcategoriesSlug.push(
                         ...parentCategory.subcategories.map((subcategory) => subcategory.slug)
                     )
-                }
 
-                where["category.slug"] = {
-                    in: [parentCategory.slug, ...subcategoriesSlug]
+                    where["category.slug"] = {
+                        in: [parentCategory.slug, ...subcategoriesSlug]
+                    }
                 }
             }
+            
             const data = await ctx.db.find({
                 collection: "products",
                 depth: 1,
