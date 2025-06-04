@@ -3,6 +3,7 @@ import { ProductList, ProductListSkeleton } from "@/modules/products/ui/componen
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
+import type { SearchParams } from "nuqs/server";
 
 interface Props {
     params: Promise<{
@@ -10,7 +11,7 @@ interface Props {
     }>
 }
 
-const Page = async ({ params }: Props) => {
+const Page = async ({ params, searchParams }: Props) => {
     const { category } = await params;
     const queryClient = getQueryClient();
     void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({
