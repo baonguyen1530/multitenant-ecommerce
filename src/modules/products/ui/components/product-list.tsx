@@ -15,6 +15,7 @@ export const ProductList = ({ category, }: Props) => {
     const trpc = useTRPC();
     const { data } = useSuspenseQuery(trpc.products.getMany.queryOptions({
         category,
+        ...filters,
     }));
 
     return (
