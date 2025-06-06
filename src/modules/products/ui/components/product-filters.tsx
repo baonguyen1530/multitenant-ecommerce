@@ -40,7 +40,13 @@ export const ProductFilters = () => {
 
   // If there are filters then the clear button will appear
   // Else the clear button is hidden away
-  const hasAnyFilters = Object.entries(filters).some(([value]) => {
+  const hasAnyFilters = Object.entries(filters).some(([key, value]) => {
+    if (key === "sort") return false;
+
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
     if (typeof value === "string") {
       return value !== "";
     }
