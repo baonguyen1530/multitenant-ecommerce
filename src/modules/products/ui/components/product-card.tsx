@@ -1,13 +1,14 @@
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 interface ProductCardProps {
     id: string;
     name: string;
     imageUrl?: string | null;
-    authorUsername: string;
-    authorImageUrl?: string | null;
+    tenantSlug: string;
+    tenantImageUrl?: string | null;
     reviewRating: number;
     reviewCount: number;
     price: number;
@@ -23,6 +24,13 @@ export const ProductCard = ({
     reviewCount,
     price,
 }: ProductCardProps) => {
+    const handleUserClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        router.push(generateTenantURL(authorUsername));
+    }
+
     return (
         <Link href={`/products/${id}`}>
             <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow border rounded-md bg-white overflow-hidden h-full flex flex-col">
@@ -39,7 +47,7 @@ export const ProductCard = ({
                     <h2 className="text-lg font-medium line-clamp-4">{name}</h2>
 
                     {/* REDIRECT TO USER'S SHOP */}
-                    <div className="flex items-center gap-2" onClick={() => {}}>
+                    <div className="flex items-center gap-2" onClick={handleUserClick}>
                         {authorImageUrl && (
                             <Image 
                                 alt={authorUsername}
