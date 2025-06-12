@@ -1,20 +1,27 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { Payload, CollectionSlug } from "payload";
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second delay between retries
 
-async function createWithRetry(payload: any, collection: string, data: any, retries = MAX_RETRIES): Promise<any> {
+async function createWithRetry(
+  payload: Payload,
+  collection: CollectionSlug,
+  data: Record<string, unknown>,
+  retries = MAX_RETRIES
+): Promise<unknown> {
   try {
     return await payload.create({
       collection,
       data,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const payloadError = error as Error & { code?: number; errorLabels?: string[] };
     if (retries > 0 && (
-      error.code === 112 || // WriteConflict
-      error.code === 24 ||  // LockTimeout
-      (error.errorLabels && Array.isArray(error.errorLabels) && error.errorLabels.includes('TransientTransactionError'))
+      payloadError.code === 112 || // WriteConflict
+      payloadError.code === 24 ||  // LockTimeout
+      (payloadError.errorLabels && Array.isArray(payloadError.errorLabels) && payloadError.errorLabels.includes('TransientTransactionError'))
     )) {
       console.log(`Retrying create operation for ${collection}. Retries left: ${retries - 1}`);
       await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
@@ -196,7 +203,7 @@ const seed = async () => {
           slug: category.slug,
           color: category.color,
           parent: null,
-        });
+        }) as { id: string };
 
         if (category.subcategories) {
           for (const subCategory of category.subcategories) {

@@ -3,7 +3,7 @@ import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, Config } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
@@ -37,7 +37,7 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    multiTenantPlugin({
+    multiTenantPlugin<Config>({
       collections: {
         products: {},
       },
