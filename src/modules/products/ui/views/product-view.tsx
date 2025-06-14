@@ -12,6 +12,12 @@ import { LinkIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
+import dynamic from  "next/dynamic";
+//import { CartButton } from "../components/cart-button";
+
+const CartButton = dynamic(
+    () => import
+)
 
 interface ProductViewProps {
     productId: string;
@@ -101,12 +107,10 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                                 <div className="flex flex-row items-center gap-2">
 
                                     {/* add to cart button */}
-                                    <Button
-                                        variant="elevated"
-                                        className="flex-1 bg-pink-400"
-                                    >
-                                        Add to cart
-                                    </Button>
+                                    <CartButton 
+                                        productId={productId}
+                                        tenantSlug={tenantSlug}
+                                    />
                                     <Button
                                         className="size-12"
                                         variant="elevated"
