@@ -16,8 +16,14 @@ import dynamic from  "next/dynamic";
 //import { CartButton } from "../components/cart-button";
 
 const CartButton = dynamic(
-    () => import
-)
+    () => import("../components/cart-button").then(
+        (mod) => mod.CartButton,
+    ),
+    {
+        ssr: false,
+        loading: () => <Button disabled className="flex-1 bg-pink-400">Add to cart</Button>
+    },
+);
 
 interface ProductViewProps {
     productId: string;
