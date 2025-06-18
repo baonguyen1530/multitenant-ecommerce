@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { generateTenantURL } from "@/lib/utils";
 import { CheckoutItem } from "../components/checkout-items";
+import { CheckoutSidebar } from "../components/checkoutout-sidebar";
+import { InboxIcon, LoaderIcon } from "lucide-react";
 
 interface CheckoutViewProps {
     tenantSlug: string;
@@ -16,7 +18,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
     const { productIds, clearAllCarts, removeProduct } = useCart(tenantSlug);
 
     const trpc = useTRPC();
-    const { data, error } = useQuery(trpc.checkout.getProducts.queryOptions({
+    const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
         ids: productIds,
     }));
 
@@ -26,6 +28,28 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
             toast.warning("Invalid product found, cart cleared")
         }
     }, [error, clearAllCarts]);
+
+    if (isLoading) {
+        return (
+            <div className="lg:pt-16 pt-4 px-4 lg:px-12">
+                <div className="border border-black border-dashed flex items-center justify-center p-8 flex-col gap-y-4 bg-white w-full rounded-lg">
+                    <LoaderIcon className="text-muted-foreground animate-spin "/>
+                </div>
+            </div>
+        );
+    }
+
+    // if the data does not exist or it's empty
+    if (data?.totalDocs === 0) {
+        return (
+            <div className="lg:pt-16 pt-4 px-4 lg:px-12">
+                <div className="border border-black border-dashed flex items-center justify-center p-8 flex-col gap-y-4 bg-white w-full rounded-lg">
+                    <InboxIcon />
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="lg:pt-16 pt-4 px-4 lg:px-12">
@@ -50,7 +74,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
 
                 <div className="lg:col-span-3">
                     <CheckoutSidebar 
-                        total={data?.totalPrice}
+                        total={data ? data.docs.reduce((sum, product) => sum + product.price, 0) : 0}
                         onCheckout={() => {}}
                         isCanceled={false}
                         isPending={false}
