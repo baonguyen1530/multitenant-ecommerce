@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,7 +9,6 @@ interface CheckoutItemProps {
     productUrl: string;
     tenantUrl: string;
     tenantName: string;
-    id: string;
     price: number;
     onRemove: () => void;
 };
@@ -21,7 +20,6 @@ export const CheckoutItem = ({
     productUrl,
     tenantUrl,
     tenantName,
-    id,
     price,
     onRemove,
 }: CheckoutItemProps) => {
@@ -41,6 +39,26 @@ export const CheckoutItem = ({
                         className="object-cover"
                     />
                 </div>
+            </div>
+
+            <div className="py-4 flex flex-col justify-between">
+                <div>
+                    <Link href={productUrl}>
+                        <h4 className="font-bold ">{name}</h4>
+                    </Link>
+                    <Link href={tenantUrl}>
+                        <p className="font-medium underline">{tenantName}</p>
+                    </Link>
+                </div>
+            </div>
+
+            <div className="py-4 flex flex-col justify-between">
+                <p className="font-medium">
+                    {formatCurrency(price)}
+                </p>
+                <button className="underline font-medium cursor-pointer" onClick={onRemove} type="button">
+                    Remove
+                </button>
             </div>
         </div>
     );
