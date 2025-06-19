@@ -45,11 +45,12 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
     //The purchase was successful
     useEffect(() => {
         if (states.success) {
+            setStates({ success: false, cancel: false });
             clearCart();
             // TODO: Invalidate library
             router.push("/products");
         }
-    }, [states.success, clearCart, router]);
+    }, [states.success, clearCart, router, setStates]);
 
     useEffect(() => {
         if (error?.data?.code === "NOT_FOUND") {
