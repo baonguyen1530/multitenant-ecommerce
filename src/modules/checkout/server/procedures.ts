@@ -3,6 +3,8 @@ import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init
 import { Media, Tenant } from "@/payload-types";
 import { TRPCError } from "@trpc/server";
 import Stripe from "stripe";
+import { CheckoutMetadata, ProductMetadata } from "../types";
+import { stripe } from "@/lib/stripe";
 
 
 export const checkoutRouter = createTRPCRouter({
@@ -70,10 +72,30 @@ export const checkoutRouter = createTRPCRouter({
                                 id: product.id,
                                 name: product.name,
                                 price: product.price
-                            }
+                            } as ProductMetadata
                         }
                     }
-                }))
+                }));
+            
+            const checkout = await stripe.checkout.sessions.create({
+                customer_email: ctx.session.user.email,
+                success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?success=true`,
+                cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?success=true`,
+                mode: "payment",
+                line_items: lineItems,
+                invoice_creation: {
+                    enabled: true,
+                },
+                metadata: {
+                    userId: ctx.session.user.id
+                } as CheckoutMetadata
+            });
+
+            if (!checkout.url) {
+                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message:"Failed to create checkout session" });
+            }
+
+            return { url: checkout.url };
         })
     ,
     getProducts: baseProcedure
