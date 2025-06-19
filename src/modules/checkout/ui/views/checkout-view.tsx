@@ -10,7 +10,7 @@ import { CheckoutItem } from "../components/checkout-items";
 import { CheckoutSidebar } from "../components/checkoutout-sidebar";
 import { InboxIcon, LoaderIcon } from "lucide-react";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface CheckoutViewProps {
     tenantSlug: string;
