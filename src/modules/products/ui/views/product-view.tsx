@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import dynamic from  "next/dynamic";
-//import { CartButton } from "../components/cart-button";
+
 
 const CartButton = dynamic(
     () => import("../components/cart-button").then(
@@ -111,12 +111,12 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                         <div className="border-t lg:border-t-0 lg:border-l h-full">
                             <div className="flex flex-col gap-4 p-5 border-b">
                                 <div className="flex flex-row items-center gap-2">
-
-                                    {/* add to cart button */}
                                     <CartButton 
+                                        isPurchased={data.isPurchased}
                                         productId={productId}
                                         tenantSlug={tenantSlug}
                                     />
+                                    {/* add to cart button */}
                                     <Button
                                         className="size-12"
                                         variant="elevated"
