@@ -20,7 +20,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
     const router = useRouter();
     const [states, setStates] = useCheckoutStates();
     const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
-
+    
     const trpc = useTRPC();
     const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
         ids: productIds,
@@ -48,7 +48,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
             setStates({ success: false, cancel: false });
             clearCart();
             // TODO: Invalidate library
-            router.push("/products");
+            router.push("/library");
         }
     }, [states.success, clearCart, router, setStates]);
 
