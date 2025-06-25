@@ -47,7 +47,7 @@ export const SearchInput = ({
                         Library
                     </Link>
                 </Button>
-            )};
+            )}
         </div>
     );
 };

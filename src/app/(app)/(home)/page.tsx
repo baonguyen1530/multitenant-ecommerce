@@ -7,7 +7,7 @@ import { DEFAULT_LIMIT } from "@/constants";
 
 interface Props {
     searchParams: Promise<SearchParams>;
-};
+}
 
 const Page = async ({ searchParams }: Props) => {
     const queryClient = getQueryClient();
