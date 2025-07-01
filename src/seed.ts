@@ -1,6 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Payload, CollectionSlug } from "payload";
+import { stripe } from "./lib/stripe";
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second delay between retries
@@ -170,13 +171,15 @@ const categories = [
 const seed = async () => {
     const payload = await getPayload({ config });
 
+    const adminAccount = await stripe.accounts.create({});
+
     // Create admin tenant
     const adminTenant = await payload.create({
       collection: "tenants",
       data: {
         name: "admin",
         slug: "admin",
-        stripeAccountId: "admin",
+        stripeAccountId: adminAccount.id,
       },
     });
 
