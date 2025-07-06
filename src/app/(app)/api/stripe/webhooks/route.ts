@@ -85,7 +85,7 @@ export async function POST(req: Request) {
                         await payload.create({
                             collection: "orders",
                             data: {
-                                StripeCheckoutSessionId: data.id,
+                                stripeCheckoutSessionId: data.id,
                                 stripeAccountId: event.account,
                                 user: user.id,
                                 product: item.price.product.metadata.id,

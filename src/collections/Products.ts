@@ -12,7 +12,8 @@ const Products: CollectionConfig = {
             const tenant = req.user?.tenants?.[0]?.tenant as Tenant
 
             return Boolean(tenant?.stripeDetailsSubmitted);
-        }
+        },
+        delete: ({ req }) => isSuperAdmin(req.user),
     },
     admin: {
         useAsTitle: "name",
@@ -26,7 +27,7 @@ const Products: CollectionConfig = {
         },
         {
             name: "description",
-            type: "text",
+            type: "richText",
         },
         {
             name: "price",
@@ -61,14 +62,30 @@ const Products: CollectionConfig = {
         },
         {
             name: "content",
-            // Content field for user to fill out
-            // TODO: Implement RichText
-            type: "textarea",
+            type: "richText",
             admin: {
                 description:
                 "Protected content only visible to customers after purchase. Add product documentation, downloadable files, getting started guides, and bonus materials. Supports Markdown formatting"
-            }
-        }
+            },
+        },
+        {
+            name: "isArchived", 
+            label: "Archive",
+            type: "checkbox",
+            defaultValue: false,
+            admin: {
+                description: "Check if you want to archive this product"
+            },
+        },
+        {
+            name: "isPrivate", 
+            label: "Private",
+            type: "checkbox",
+            defaultValue: false,
+            admin: {
+                description: "Check if you want to hide this product on the front page"
+            },
+        },
     ],
 };
 
