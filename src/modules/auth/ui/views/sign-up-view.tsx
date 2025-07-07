@@ -76,7 +76,7 @@ export const SignUpView = () => {
                             {/* go back */}
                             <Link href="/">
                                 <span className={cn("text-2xl font-semibold", poppins.className)}>
-                                    4rchiv3dGarm3nts
+                                    4rchivedGarments
                                 </span>
                             </Link>
                             <Button

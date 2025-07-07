@@ -57,7 +57,7 @@ export const useCartStore = create<CartState>()(
                 }),
         }), 
         {
-            name: "4rchiv3dGarm3nts-cart",
+            name: "4rchivedGarments-cart",
             storage: createJSONStorage(() => localStorage),
         },
     ),

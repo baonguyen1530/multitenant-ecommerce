@@ -15,7 +15,7 @@ export const Footer = () => {
                 <p>Powered by</p>
                 <Link href="/">
                     <span className={cn("text-xl font-semibold", poppins.className)}>
-                        4rchiv3dGarm3nts
+                        4rchivedGarments
                     </span>
                 </Link>
             </div>
