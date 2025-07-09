@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { CheckoutView } from "@/modules/checkout/ui/views/checkout-view";
 
 interface PageProps {

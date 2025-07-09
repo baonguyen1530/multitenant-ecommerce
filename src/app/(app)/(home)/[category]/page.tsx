@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import type { SearchParams } from "nuqs/server";

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { LibraryView } from "@/modules/library/ui/views/library-view";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getQueryClient, trpc } from "@/trpc/server";
