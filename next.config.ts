@@ -1,5 +1,6 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
+import path from 'path';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -15,9 +16,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    esmExternals: 'loose',
-  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals = config.externals || [];
@@ -27,7 +25,8 @@ const nextConfig: NextConfig = {
     // Completely exclude sharp from being bundled
     config.resolve.alias = {
       ...config.resolve.alias,
-      sharp: false
+      sharp: false,
+      '@': path.resolve(__dirname, 'src'),
     };
     
     // Add fallback for sharp
@@ -51,6 +50,10 @@ const nextConfig: NextConfig = {
       /Failed to load sharp/,
       /Module not found.*sharp/
     ];
+    
+    // Add better module resolution
+    config.resolve.modules = ['node_modules', 'src'];
+    config.resolve.extensions = ['.js', '.jsx', '.ts', '.tsx', '.json'];
     
     return config;
   },
