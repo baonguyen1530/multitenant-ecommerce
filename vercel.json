@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install --include=optional",
+  "installCommand": "npm install",
   "framework": "nextjs",
   "functions": {
     "src/app/(payload)/admin/[[...segments]]/page.tsx": {
@@ -8,6 +8,7 @@
     }
   },
   "env": {
-    "SHARP_IGNORE_GLOBAL_LIBVIPS": "1"
+    "SHARP_IGNORE_GLOBAL_LIBVIPS": "1",
+    "PAYLOAD_DISABLE_IMAGE_PROCESSING": "1"
   }
 } 

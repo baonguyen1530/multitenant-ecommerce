@@ -20,15 +20,6 @@ import { isSuperAdmin } from './lib/access'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Handle sharp import gracefully
-let sharp: any
-try {
-  sharp = require('sharp')
-} catch (error) {
-  console.warn('Sharp not available, image processing will be limited')
-  sharp = null
-}
-
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -48,7 +39,12 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  ...(sharp && { sharp }),
+  // Disable image processing to avoid sharp dependency
+  upload: {
+    limits: {
+      fileSize: 5000000, // 5MB
+    },
+  },
   plugins: [
     payloadCloudPlugin(),
     multiTenantPlugin<Config>({
