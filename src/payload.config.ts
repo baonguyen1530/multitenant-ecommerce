@@ -5,7 +5,6 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig, Config } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 
 import Users from './collections/Users'
@@ -20,6 +19,15 @@ import { isSuperAdmin } from './lib/access'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Handle sharp import gracefully
+let sharp: any
+try {
+  sharp = require('sharp')
+} catch (error) {
+  console.warn('Sharp not available, image processing will be limited')
+  sharp = null
+}
 
 export default buildConfig({
   admin: {
@@ -40,7 +48,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  sharp,
+  ...(sharp && { sharp }),
   plugins: [
     payloadCloudPlugin(),
     multiTenantPlugin<Config>({

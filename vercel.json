@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --include=optional",
+  "framework": "nextjs",
+  "functions": {
+    "src/app/(payload)/admin/[[...segments]]/page.tsx": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "SHARP_IGNORE_GLOBAL_LIBVIPS": "1"
+  }
+} 

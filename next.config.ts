@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   serverExternalPackages: ['payload'],
   images: {
+    unoptimized: true,
     domains: ['localhost'],
     remotePatterns: [
       {
@@ -14,6 +15,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['sharp']
+  }
 };
 
 export default withPayload(nextConfig);
