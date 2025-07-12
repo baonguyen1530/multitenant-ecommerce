@@ -11,9 +11,9 @@ console.log('Starting custom build process...');
 // Set environment variables to handle sharp
 process.env.SHARP_IGNORE_GLOBAL_LIBVIPS = '1';
 
+// Try to install sharp for the correct platform
+console.log('Installing sharp for Linux x64...');
 try {
-  // Try to install sharp for the correct platform
-  console.log('Installing sharp for Linux x64...');
   execSync('npm install --platform=linux --arch=x64 sharp', { 
     stdio: 'inherit',
     env: { ...process.env, SHARP_IGNORE_GLOBAL_LIBVIPS: '1' }
