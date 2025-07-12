@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
       ...config.resolve.alias,
       sharp: false,
       '@': path.resolve(__dirname, 'src'),
+      '@payload-config': path.resolve(__dirname, 'src/payload.config.ts'),
     };
     
     // Add fallback for sharp
